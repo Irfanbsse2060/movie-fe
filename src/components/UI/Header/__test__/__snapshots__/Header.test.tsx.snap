@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should be able to render 1`] = `
+<div>
+  <ul
+    class="header"
+    data-testid="header"
+  >
+    <li
+      class="header__item"
+    >
+      <a
+        href="/"
+      >
+        Home
+      </a>
+    </li>
+    <li
+      class="header__item"
+    >
+      <a
+        href="/settings"
+      >
+        Settings
+      </a>
+    </li>
+  </ul>
+</div>
+`;

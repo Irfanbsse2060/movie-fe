@@ -1,0 +1,46 @@
+
+$secondary-button-accent: #21bcb6;
+$black: #404040;
+
+.custom-button {
+  display: inline-block;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-weight: 500;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition: 0.5s;
+  padding: 5px 12px;
+  border: 2px solid;
+  border-radius: 20px;
+  line-height: 1;
+  min-width: 85px;
+  cursor: pointer;
+
+  &:hover {
+    background: transparent;
+    color: #485465;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: $secondary-button-accent;
+    color: #dddddd;
+    border-color: $secondary-button-accent;
+  }
+
+  &--secondary {
+    background: $secondary-button-accent;
+    color: $black;
+    border-color: $secondary-button-accent;
+  }
+}
