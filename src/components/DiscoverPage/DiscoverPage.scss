@@ -1,3 +1,11 @@
-.main-page {
+.discovery-page {
+  margin: 20px;
+}
 
+.movie-overview-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  list-style: none;
+  margin: 0px;
 }
