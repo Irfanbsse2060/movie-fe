@@ -10,6 +10,7 @@ import './App.css';
 
 import {Header} from "./components/UI";
 import DiscoverPage from "./components/DiscoverPage";
+import MovieDetailPage from "./components/MovieDetailPage";
 import ManagePage from "./components/ManagePage";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               <div>
                 <Routes>
                   <Route  path={routePaths.discover} element={<DiscoverPage/>} />
+                  <Route  path={routePaths.discoverMovie} element={<MovieDetailPage/>} />
                   <Route path={routePaths.manage} element={<ManagePage/>}/>
                 </Routes>
               </div>

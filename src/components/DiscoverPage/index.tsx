@@ -3,6 +3,8 @@ import {API_URL, IMAGE_BASE_URL} from "../../config/constants";
 import { Skeleton } from 'antd';
 import './DiscoverPage.scss'
 import { Card } from 'antd';
+import {Link} from "react-router-dom";
+import SearchMovie from "./SearchMovie";
 
 const { Meta } = Card;
 interface MovieOverview {
@@ -21,15 +23,18 @@ const MoviesOverviewList = ({movies} : {movies:MovieOverview[]}) =>{
             {
                 movies.map((movie)=>{
                     return (
-                        <li key={movie.id}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img alt="movie poster" src={`${IMAGE_BASE_URL}/${movie.poster_path}`} />}
-                            >
-                                <Meta title="Europe Street beat" description="www.instagram.com" />
-                            </Card>
-                        </li>
+                        <Link to={`/discover/${movie.id}`} key={movie.id}>
+                            <li>
+                                <Card
+                                    hoverable
+                                    style={{ width: 240 }}
+                                    cover={<img alt="movie poster" src={`${IMAGE_BASE_URL}/${movie.poster_path}`} />}
+                                >
+                                    <Meta title={movie.title} description={movie.overview} />
+                                </Card>
+                            </li>
+                        </Link>
+
                     )
 
                 })
@@ -63,6 +68,9 @@ function DiscoverPage() {
 
     return (
         <main className='discovery-page'>
+            <section className='discovery-page__search'>
+                <SearchMovie/>
+            </section>
             {isLoading && <Skeleton active />}
             { error && <div>something went wrong</div>}
             {

@@ -1,5 +1,6 @@
 export const routePaths = {
     discover: "/",
+    discoverMovie: "/discover/:movieId",
     manage: "/manage"
 }
 
