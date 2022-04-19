@@ -1,84 +1,80 @@
 // @ts-nocheck
 import React from 'react'
-import { Select } from 'antd';
+import {Select} from 'antd';
+import {API_URL} from "../../../config/constants";
+import {useNavigate} from "react-router-dom";
 
-import jsonp from 'fetch-jsonp';
-import qs from 'qs';
-
-const { Option } = Select;
+const {Option} = Select;
 
 let timeout;
 let currentValue;
 
-function fetch(value, callback) {
+function fetchData(value, callback) {
     if (timeout) {
         clearTimeout(timeout);
         timeout = null;
     }
     currentValue = value;
 
-    function fake() {
-        const str = qs.stringify({
-            code: 'utf-8',
-            q: value,
-        });
-        jsonp(`https://suggest.taobao.com/sug?${str}`)
-            .then(response => response.json())
-            .then(d => {
-                if (currentValue === value) {
-                    const { result } = d;
-                    const data = [];
-                    result.forEach(r => {
-                        data.push({
-                            value: r[0],
-                            text: r[0],
-                        });
+    async function fake() {
+        try {
+            const response = await fetch(`${API_URL}/search/movies?query=${value}`)
+            const resData = await response.json()
+            if (currentValue === value) {
+                const data = [];
+                resData.forEach(r => {
+                    data.push({
+                        value: r.id,
+                        text: r.title,
                     });
-                    callback(data);
-                }
-            });
+                });
+                callback(data);
+            }
+        } catch (e) {
+            console.log('something went wrong =', e)
+        }
+
     }
 
     timeout = setTimeout(fake, 300);
 }
 
-class SearchInput extends React.Component {
-    state = {
-        data: [],
-        value: undefined,
-    };
+const SearchInput  = ({placeholder, style}) => {
 
-    handleSearch = value => {
+    const navigate = useNavigate();
+    const [data, setData] = React.useState([])
+    const [value, setValue] = React.useState(undefined)
+
+    const handleSearch = value => {
         if (value) {
-            fetch(value, data => this.setState({ data }));
+            fetchData(value, data => setData(data));
         } else {
-            this.setState({ data: [] });
+            setData([]);
         }
     };
 
-    handleChange = value => {
-        this.setState({ value });
+   const handleChange = value => {
+        navigate(`/discover/${value}`)
+       setValue(value)
     };
 
-    render() {
-        const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
-        return (
-            <Select
-                showSearch
-                value={this.state.value}
-                placeholder={this.props.placeholder}
-                style={this.props.style}
-                defaultActiveFirstOption={false}
-                showArrow={false}
-                filterOption={false}
-                onSearch={this.handleSearch}
-                onChange={this.handleChange}
-                notFoundContent={null}
-            >
-                {options}
-            </Select>
-        );
-    }
+    const options = data.map(d => <Option key={d.value}>{d.text}</Option>);
+    return (
+        <Select
+            showSearch
+            value={value}
+            placeholder={placeholder}
+            style={style}
+            defaultActiveFirstOption={false}
+            showArrow={false}
+            filterOption={false}
+            onSearch={handleSearch}
+            onChange={handleChange}
+            notFoundContent={null}
+        >
+            {options}
+        </Select>
+    );
 }
 
-export default () => <SearchInput placeholder="input search text" style={{ width: 300 }} />;
+export default () => <SearchInput placeholder="type to search movie and select from list" style={{width: 300}}/>;
