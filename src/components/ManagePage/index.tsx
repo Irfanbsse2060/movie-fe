@@ -5,22 +5,8 @@ import {API_URL} from "../../config/constants";
 
 import './ManagePage.scss'
 
-interface Item {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-}
+const {Search} = Input
 
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-    originData.push({
-        key: i.toString(),
-        name: `Edrward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`,
-    });
-}
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     editing: boolean;
     dataIndex: string;
@@ -41,14 +27,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
                                                        children,
                                                        ...restProps
                                                    }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    const inputNode = inputType === 'number' ? <InputNumber/> : <Input/>;
 
     return (
         <td {...restProps}>
             {editing ? (
                 <Form.Item
                     name={dataIndex}
-                    style={{ margin: 0 }}
+                    style={{margin: 0}}
                     rules={[
                         {
                             required: true,
@@ -64,7 +50,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
         </td>
     );
 };
-const openNotificationWithIcon = (type, title,description) => {
+const openNotificationWithIcon = (type, title, description) => {
     notification[type]({
         message: title,
         description
@@ -72,24 +58,36 @@ const openNotificationWithIcon = (type, title,description) => {
 };
 
 
+const SearchComponent = ({onSearch}) => {
+
+    return (<div>
+        <Search
+            placeholder="input search text"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onSearch={onSearch}
+        />
+    </div>)
+}
+
+
 const ManagePage = () => {
     const [form] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string| null>(null)
+    const [error, setError] = useState<string | null>(null)
 
-    const fetchData = async () => {
+    const fetchData = async (query = '') => {
         setIsLoading(true)
         try {
-            const response = await fetch(`${API_URL}/movies/booking`)
+            const response = await fetch(`${API_URL}/movies/booking?query=${query}`)
             const data = await response.json()
             setData(data)
-        }
-        catch (e) {
+        } catch (e) {
             setError('something went wrong')
-        }
-        finally {
+        } finally {
             setIsLoading(false)
         }
     }
@@ -99,8 +97,7 @@ const ManagePage = () => {
             await fetch(`${API_URL}/movies/booking/${bookingId}`, {method: 'DELETE'})
             openNotificationWithIcon('success', 'Movie Booking Cancellation', `you have successfully deleted  booking`)
             fetchData()
-        }
-        catch (e) {
+        } catch (e) {
             openNotificationWithIcon('error', 'Movie Booking Cancellation', `something went wrong.`)
         }
     }
@@ -112,7 +109,7 @@ const ManagePage = () => {
     const isEditing = (record: Item) => record.key === editingKey;
 
     const edit = (record: Partial<Item> & { key: React.Key }) => {
-        form.setFieldsValue({ name: '', age: '', address: '', ...record });
+        form.setFieldsValue({name: '', age: '', address: '', ...record});
         setEditingKey(record.key);
     };
 
@@ -186,15 +183,15 @@ const ManagePage = () => {
             dataIndex: 'bookedDate',
             width: '15%',
             editable: true,
-            render: (bookedDate ) =>{
-                return (<span> {new Date(bookedDate).toLocaleDateString( 'en',{
+            render: (bookedDate) => {
+                return (<span> {new Date(bookedDate).toLocaleDateString('en', {
                     localeMatcher: "best fit",
                     weekday: "long",
                     year: "numeric",
-                    month: "short"  ,
-                    day: "numeric" ,
-                    hour: "numeric" ,
-                    minute: "numeric" ,
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
                 })}</span>)
             }
         },
@@ -207,7 +204,7 @@ const ManagePage = () => {
                 const editable = isEditing(record);
                 return editable ? (
                     <span>
-            <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+            <Typography.Link onClick={() => save(record.key)} style={{marginRight: 8}}>
               Save
             </Typography.Link>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
@@ -244,27 +241,35 @@ const ManagePage = () => {
         };
     });
 
+    const onSearch = (query) => {
+        fetchData(query)
+
+    }
+
     return (
-       <div className='manage-page'>
-           {error && <div>something went wrong.....</div>}
-           {isLoading && <div>Loading.....</div>}
-           {data &&  <Form form={form} component={false}>
-               <Table
-                   components={{
-                       body: {
-                           cell: EditableCell,
-                       },
-                   }}
-                   bordered
-                   dataSource={data}
-                   columns={mergedColumns}
-                   rowClassName="editable-row"
-                   pagination={{
-                       onChange: cancel,
-                   }}
-               />
-           </Form>}
-       </div>
+        <div className='manage-page'>
+            {error && <div>something went wrong.....</div>}
+            {data && (<div>
+                <SearchComponent onSearch={onSearch}/>
+                <Form form={form} component={false}>
+                    <Table
+                        components={{
+                            body: {
+                                cell: EditableCell,
+                            },
+                        }}
+                        loading={isLoading}
+                        bordered
+                        dataSource={data}
+                        columns={mergedColumns}
+                        rowClassName="editable-row"
+                        pagination={{
+                            onChange: cancel,
+                        }}
+                    />
+                </Form>
+            </div>)}
+        </div>
     );
 };
 

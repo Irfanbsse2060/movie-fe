@@ -61,8 +61,6 @@ function MovieDetailPage() {
     }, []);
 
 
-
-
     return (
         <main>
             {isLoading && <Skeleton active/>}
@@ -90,12 +88,11 @@ function MovieDetailPage() {
                                 <Button type="primary" onClick={showModal}>
                                     Book Seat
                                 </Button>
+                                <div>
+                                    <h2>Reviews</h2>
+                                    <MovieReviews movieId={params.movieId as string}/>
+                                </div>
                             </div>
-
-                        </section>
-                        <section>
-                            <h2>Reviews</h2>
-                            <MovieReviews movieId={params.movieId as string}/>
                         </section>
                     </div>
                 )
