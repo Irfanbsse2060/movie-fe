@@ -1,9 +1,8 @@
 export const routePaths = {
     discover: "/",
-    discoverMovie: "/discover/:movieId",
+    discoverMovie: (movieId?: string | undefined) => movieId? `/discover/${movieId}`:  "/discover/:movieId",
     manage: "/manage"
 }
-
 
 export const linkWithRoutes = [
     {

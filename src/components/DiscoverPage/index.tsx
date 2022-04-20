@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {API_URL, IMAGE_BASE_URL} from "../../config/constants";
 import { Skeleton } from 'antd';
-import './DiscoverPage.scss'
 import { Card } from 'antd';
 import {Link} from "react-router-dom";
 import SearchMovie from "./SearchMovie";
+import {routePaths} from "../../config/routes";
+import './discover-page.scss'
 
 const { Meta } = Card;
 interface MovieOverview {
@@ -23,7 +24,7 @@ const MoviesOverviewList = ({movies} : {movies:MovieOverview[]}) =>{
             {
                 movies.map((movie)=>{
                     return (
-                        <Link to={`/discover/${movie.id}`} key={movie.id}>
+                        <Link to={routePaths.discoverMovie(movie.id)} key={movie.id}>
                             <li>
                                 <Card
                                     hoverable

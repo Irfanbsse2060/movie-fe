@@ -24,7 +24,7 @@ function App() {
               <div>
                 <Routes>
                   <Route  path={routePaths.discover} element={<DiscoverPage/>} />
-                  <Route  path={routePaths.discoverMovie} element={<MovieDetailPage/>} />
+                  <Route  path={routePaths.discoverMovie()} element={<MovieDetailPage/>} />
                   <Route path={routePaths.manage} element={<ManagePage/>}/>
                 </Routes>
               </div>

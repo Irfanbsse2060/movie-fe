@@ -3,6 +3,7 @@ import React from 'react'
 import {Select} from 'antd';
 import {API_URL} from "../../../config/constants";
 import {useNavigate} from "react-router-dom";
+import {routePaths} from "../../../config/routes";
 
 const {Option} = Select;
 
@@ -16,7 +17,7 @@ function fetchData(value, callback) {
     }
     currentValue = value;
 
-    async function fake() {
+    async function fetchQuery() {
         try {
             const response = await fetch(`${API_URL}/search/movies?query=${value}`)
             const resData = await response.json()
@@ -35,12 +36,11 @@ function fetchData(value, callback) {
         }
 
     }
-
-    timeout = setTimeout(fake, 300);
+    timeout = setTimeout(fetchQuery, 300);
 }
 
-const SearchInput  = ({placeholder, style}) => {
 
+const SearchMovie = () => {
     const navigate = useNavigate();
     const [data, setData] = React.useState([])
     const [value, setValue] = React.useState(undefined)
@@ -53,12 +53,14 @@ const SearchInput  = ({placeholder, style}) => {
         }
     };
 
-   const handleChange = value => {
-        navigate(`/discover/${value}`)
-       setValue(value)
+    const handleChange = value => {
+        navigate(routePaths.discoverMovie(value))
+        setValue(value)
     };
-
     const options = data.map(d => <Option key={d.value}>{d.text}</Option>);
+
+    const placeholder = 'type to search movie and select from list'
+    const style ={width: 300}
     return (
         <Select
             showSearch
@@ -77,4 +79,4 @@ const SearchInput  = ({placeholder, style}) => {
     );
 }
 
-export default () => <SearchInput placeholder="type to search movie and select from list" style={{width: 300}}/>;
+export default SearchMovie;

@@ -1,48 +1,69 @@
-// @ts-nocheck
 import React, {useState} from 'react'
-import {List, Avatar, Button, Skeleton, Rate} from 'antd';
-import {API_URL, IMAGE_BASE_URL} from "../../../config/constants";
+import {List, Avatar, Rate} from 'antd';
+import {API_URL} from "../../../config/constants";
 
 
-const averageRating = (list) =>{
+interface Review {
+    author: string,
+    author_details: { name: string, url: string, username: string, avatar_path: string, rating: string },
+    content: string,
+    created_at: string,
+    id: string,
+    updated_at: string,
+    url: string,
 
-    const rateReviews  = list.filter(review => review?.author_details?.rating)
-    if(rateReviews.length === 0)
-        return 0 ;
-    const sum = rateReviews.reduce((partialSum, a) => partialSum + parseFloat(a?.author_details?.rating), 0);
-    return (sum/rateReviews.length).toFixed(2);
 }
 
-const MovieReviews = ({movieId} : {movieId:string}) =>{
+interface MovieReviewResponse {
+    results: Review[],
+    total_pages: number,
+    total_results: number
+}
 
-    const [data, setData] = useState({})
-    const [page, setPage] = useState(1)
+
+const averageRating = (list: Review[]) => {
+    const rateReviews = list.filter(review => review?.author_details?.rating)
+    if (rateReviews.length === 0)
+        return 0;
+    const sum = rateReviews.reduce((partialSum, a) => partialSum + parseFloat(a?.author_details?.rating), 0);
+    return (sum / rateReviews.length).toFixed(2);
+}
+
+const initialMovieReviewData = {
+    results: [],
+    total_pages: 0,
+    total_results: 0
+}
+
+
+const MovieReviews = ({movieId}: { movieId: string }) => {
+    const [data, setData] = useState<MovieReviewResponse>(initialMovieReviewData)
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(true)
-
-    React.useEffect(()=>{
+    const [error, setError] = useState<null | string>(null)
+    const page = 1; // TODO: need to implement pagination
+    React.useEffect(() => {
         const fetchData = async (): Promise<any> => {
             try {
                 setLoading(true)
                 const response = await fetch(`${API_URL}/movies/${movieId}/reviews?${page}`)
                 const res = await response.json()
                 setData(res)
-            }
-            catch (e) {
+            } catch (e) {
                 setError('something went wrong')
-            }
-            finally {
+            } finally {
                 setLoading(false)
             }
         }
         fetchData()
-    }, [])
-
-    const getImageUrl = (imageName)=> imageName && imageName.substring(1, imageName.length)
+    }, [movieId])
+    const getImageUrl = (imageName: string) => imageName && imageName.substring(1, imageName.length)
 
     const reviewsList = data?.results || []
     const totalReviews = data?.total_results || 0
     const averageMovieRating = averageRating(reviewsList)
+
+    if (error)
+        <div/>;
 
     return (
         <>
@@ -56,10 +77,11 @@ const MovieReviews = ({movieId} : {movieId:string}) =>{
                 renderItem={item => (
                     <List.Item>
                         <List.Item.Meta
-                            avatar={<Avatar src={getImageUrl(item?.author_details?.avatar_path)} />}
+                            avatar={<Avatar src={getImageUrl(item?.author_details?.avatar_path)}/>}
                             title={<a href="https://ant.design">{item.author}</a>}
                             description={<div>
-                                <Rate value={item?.author_details?.rating} count={10} /> <br/>
+                                <Rate value={parseFloat(item?.author_details?.rating) as number} count={10}/>
+                                <br/>
                                 {item.content}
                             </div>}
                         />
