@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 import './Header.scss'
 
 interface HeaderLinks {
@@ -11,7 +11,6 @@ interface HeaderProps {
     linkList: HeaderLinks[]
 }
 
-
 export default function Header(props: HeaderProps) {
     const {linkList} = props
     return (
@@ -20,7 +19,14 @@ export default function Header(props: HeaderProps) {
                 linkList.map((item) => {
                     return (
                         <li key={item.url} className='header__item'>
-                            <Link to={item.url}>{item.label}</Link>
+
+                            <NavLink
+                                to={item.url}
+                                className={({isActive}) =>
+                                    (isActive ? "active" : "not-active")}
+                            >
+                                {item.label}
+                            </NavLink>
                         </li>
 
                     )

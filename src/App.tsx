@@ -5,7 +5,7 @@ import {
   Route,
 } from "react-router-dom";
 import {routePaths,linkWithRoutes} from './config/routes'
-import './App.css';
+import './App.scss';
 
 
 import {Header} from "./components/UI";
@@ -20,7 +20,7 @@ function App() {
             <header className='app__header'>
               <Header linkList={linkWithRoutes}/>
             </header>
-            <main>
+            <main className='app__main'>
               <div>
                 <Routes>
                   <Route  path={routePaths.discover} element={<DiscoverPage/>} />

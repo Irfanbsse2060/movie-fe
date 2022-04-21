@@ -1,8 +1,8 @@
-// @ts-nocheck
 import React from 'react'
-import {Form, Input, InputNumber, Button, notification, DatePicker} from 'antd';
+import {Button, DatePicker, Form, Input, InputNumber} from 'antd';
 import {API_URL} from "../../../config/constants";
 import {useParams} from "react-router";
+import {Notfication, NOTIFICATION_TYPE} from "../../UI";
 
 const layout = {
     labelCol: {span: 8},
@@ -22,14 +22,7 @@ const validateMessages = {
 };
 /* eslint-enable no-template-curly-in-string */
 
-const openNotificationWithIcon = (type, title, description) => {
-    notification[type]({
-        message: title,
-        description
-    });
-};
-
-const BookingForm = ({onSubmit}) => {
+const BookingForm = ({onSubmit} : {onSubmit: ()=> void}) => {
     const params = useParams();
     const [form] = Form.useForm();
     const [isFormSubmitting, setIsFormSubmitting] = React.useState(false)
@@ -46,17 +39,17 @@ const BookingForm = ({onSubmit}) => {
             if (!response.ok) {
                 throw new Error(data?.message);
             }
-            openNotificationWithIcon('success', 'Movie Booking', `you have successfully booked ${bookingData.numberOfSeats} seats`)
+            Notfication(NOTIFICATION_TYPE.SUCCESS, 'Movie Booking', `you have successfully booked ${bookingData.numberOfSeats} seats`)
             form.resetFields();
             onSubmit()
-        } catch (e) {
-            openNotificationWithIcon('error', 'Movie Booking', e.message)
+        } catch (e: any) {
+            Notfication(NOTIFICATION_TYPE.ERROR, 'Movie Booking', e.message)
         } finally {
             setIsFormSubmitting(false)
         }
     };
 
-    const disabledDate = (current) => {
+    const disabledDate = (current: any) => {
         // Can not select days before today and today
         const date = new Date()
         date.setDate(date.getDate())
