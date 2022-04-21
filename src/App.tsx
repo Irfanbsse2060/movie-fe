@@ -5,7 +5,6 @@ import {
   Route,
 } from "react-router-dom";
 import {routePaths,linkWithRoutes} from './config/routes'
-import './App.scss';
 
 
 import {Header} from "./components/UI";
