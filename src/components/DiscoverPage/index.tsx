@@ -31,7 +31,7 @@ const MoviesOverviewList = ({movies} : {movies:MovieOverview[]}) =>{
                                     style={{ width: 240 }}
                                     cover={<img alt="movie poster" src={`${IMAGE_BASE_URL}/${movie.poster_path}`} />}
                                 >
-                                    <Meta title={movie.title} description={movie.overview} />
+                                    <Meta title={movie.title} description={<p className="movie-overview-card__description">{movie.overview}</p>}/>
                                 </Card>
                             </li>
                         </Link>

@@ -74,6 +74,7 @@ const MovieReviews = ({movieId}: { movieId: string }) => {
                 loading={loading}
                 itemLayout="horizontal"
                 dataSource={reviewsList}
+                locale={{emptyText:'No review'}}
                 renderItem={item => (
                     <List.Item>
                         <List.Item.Meta

@@ -41,13 +41,16 @@ const BookingForm = ({onSubmit}) => {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({...bookingData, movieId: params.movieId})
             };
-            await fetch(`${API_URL}/movies/${params.movieId}/booking`, requestOptions)
-            // const data = await response.json()
+            const response = await fetch(`${API_URL}/movies/${params.movieId}/booking`, requestOptions)
+            const data = await response.json()
+            if (!response.ok) {
+                throw new Error(data?.message);
+            }
             openNotificationWithIcon('success', 'Movie Booking', `you have successfully booked ${bookingData.numberOfSeats} seats`)
             form.resetFields();
             onSubmit()
         } catch (e) {
-            openNotificationWithIcon('error', 'Movie Booking', `something went wrong.`)
+            openNotificationWithIcon('error', 'Movie Booking', e.message)
         } finally {
             setIsFormSubmitting(false)
         }

@@ -19,7 +19,7 @@ function fetchData(value, callback) {
 
     async function fetchQuery() {
         try {
-            const response = await fetch(`${API_URL}/search/movies?query=${value}`)
+            const response = await fetch(`${API_URL}/movies/search?query=${value}`)
             const resData = await response.json()
             if (currentValue === value) {
                 const data = [];
