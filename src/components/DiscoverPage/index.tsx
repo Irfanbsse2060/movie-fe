@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import SearchMovie from "./SearchMovie";
 import {routePaths} from "../../config/routes";
 import './discover-page.scss'
+import {formatDate} from "../../utils/dateUtil";
 
 const {Meta} = Card;
 
@@ -16,6 +17,7 @@ interface MovieOverview {
     original_title: string,
     release_date: string
     poster_path: string
+    vote_average: number
 }
 
 const MoviesOverviewList = ({movies}: { movies: MovieOverview[] }) => {
@@ -32,8 +34,12 @@ const MoviesOverviewList = ({movies}: { movies: MovieOverview[] }) => {
                                     style={{width: 240}}
                                     cover={<img alt="movie poster" src={`${IMAGE_BASE_URL}/${movie.poster_path}`}/>}
                                 >
-                                    <Meta title={movie.title} description={<p
-                                        className="movie-overview-card__description">{movie.overview}</p>}/>
+                                    <Meta title={movie.title} description={<div
+                                        className="movie-overview-card__description">
+                                        <h4>Release Date: {formatDate(movie.release_date)}</h4>
+                                        <h4>Rating: {movie.vote_average}</h4>
+                                        <p>{movie.overview}</p>
+                                    </div>}/>
                                 </Card>
                             </li>
                         </Link>

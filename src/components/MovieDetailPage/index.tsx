@@ -6,6 +6,7 @@ import './movie-detail-page.scss'
 
 import MovieReviews from './MovieReviews'
 import BookingForm from './BookingForm'
+import {formatDate} from "../../utils/dateUtil";
 
 
 interface Movie {
@@ -15,6 +16,7 @@ interface Movie {
     "poster_path": string,
     "original_title": string,
     "release_date": string,
+    "vote_average": number,
     "backdrop_path": string,
     "popularity": number,
     "vote_count": number,
@@ -83,6 +85,8 @@ function MovieDetailPage() {
                             </div>
                             <div>
                                 <h3>{movie.title}</h3>
+                                <h4>Release Date: {formatDate(movie.release_date)}</h4>
+                                <h4>Rating: {movie.vote_average}</h4>
                                 <p>{movie.overview}</p>
                                 <Button type="primary" onClick={showModal}>
                                     Book Seat

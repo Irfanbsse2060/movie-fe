@@ -20,15 +20,6 @@ interface MovieReviewResponse {
     total_results: number
 }
 
-
-const averageRating = (list: Review[]) => {
-    const rateReviews = list.filter(review => review?.author_details?.rating)
-    if (rateReviews.length === 0)
-        return 0;
-    const sum = rateReviews.reduce((partialSum, a) => partialSum + parseFloat(a?.author_details?.rating), 0);
-    return (sum / rateReviews.length).toFixed(2);
-}
-
 const initialMovieReviewData = {
     results: [],
     total_pages: 0,
@@ -60,7 +51,6 @@ const MovieReviews = ({movieId}: { movieId: string }) => {
 
     const reviewsList = data?.results || []
     const totalReviews = data?.total_results || 0
-    const averageMovieRating = averageRating(reviewsList)
 
     if (error)
         <div/>;
@@ -68,20 +58,18 @@ const MovieReviews = ({movieId}: { movieId: string }) => {
     return (
         <>
             <h3>Total reviews: {totalReviews}</h3>
-            <h3>Average rating: {averageMovieRating}</h3>
             <List
-                className="demo-loadmore-list"
                 loading={loading}
                 itemLayout="horizontal"
                 dataSource={reviewsList}
-                locale={{emptyText:'No review'}}
+                locale={{emptyText: 'No review'}}
                 renderItem={item => (
                     <List.Item>
                         <List.Item.Meta
                             avatar={<Avatar src={getImageUrl(item?.author_details?.avatar_path)}/>}
-                            title={<a href="https://ant.design">{item.author}</a>}
+                            title={item.author}
                             description={<div>
-                                <Rate value={parseFloat(item?.author_details?.rating) as number} count={10}/>
+                                <Rate disabled value={parseFloat(item?.author_details?.rating) as number} count={10}/>
                                 <br/>
                                 {item.content}
                             </div>}

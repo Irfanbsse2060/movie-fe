@@ -136,7 +136,7 @@ const ManagePage = () => {
                     columns={columns}
                     pagination={{
                         onChange: () => {
-                        },
+                        }
                     }}
                 />
             </div>)}

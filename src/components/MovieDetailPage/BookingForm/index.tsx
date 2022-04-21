@@ -70,7 +70,7 @@ const BookingForm = ({onSubmit} : {onSubmit: ()=> void}) => {
                        rules={[{type: 'number', min: 1, max: 10, required: true}]}>
                 <InputNumber/>
             </Form.Item>
-            <Form.Item name={['bookedDate']} label="DatePicker" rules={[{required: true}]}>
+            <Form.Item name={['bookedDate']} label="Booking Date" rules={[{required: true}]}>
                 <DatePicker showTime disabledDate={disabledDate}/>
             </Form.Item>
             <Form.Item wrapperCol={{...layout.wrapperCol, offset: 8}}>
