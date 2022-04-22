@@ -7,6 +7,7 @@ I have used the [Create React App](https://github.com/facebook/create-react-app)
 - Typescript
 - SCSS for styling
 - React testing library for testing
+- Antd ui lib
 
 ## Requirement for running app
 

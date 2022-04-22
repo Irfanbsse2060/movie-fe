@@ -134,6 +134,7 @@ const ManagePage = () => {
                     bordered
                     dataSource={data}
                     columns={columns}
+                    locale={{emptyText: 'No booking'}}
                     pagination={{
                         onChange: () => {
                         }
